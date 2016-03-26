@@ -63,7 +63,7 @@ instance Random Space where
     randomR (x,y) g = let (n, g') = randomR (fromEnum x, fromEnum y) g
                       in (toEnum n, g')
 
-    random g = randomR (minBound :: Space, maxBound :: Space) g
+    random = randomR (minBound :: Space, maxBound :: Space) 
 
 newtype Board = Board { getBoard :: Vector Space }
 
