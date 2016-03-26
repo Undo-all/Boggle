@@ -2,6 +2,7 @@
 
 module Main (main) where
 
+import Extra
 import Data.List
 import Data.Monoid
 import Control.Monad
@@ -109,8 +110,8 @@ uncurry3 f (x,y,z) = f x y z
 
 findPaths :: Dictionary -> Board -> (Int, Int) -> [Builder]
 findPaths dict b pos =
-    concatMap firstIter (directions [pos] pos)
-  where firstIter p = case directions [pos, p] p of
+    concatMap firstIter (directions [] pos)
+  where firstIter p = case directions [pos] p of
             [] -> []
             xs -> let nstr = (b ! pos) <> (b ! p)
                       strs = map ((nstr <>) . (b !)) xs
@@ -125,13 +126,13 @@ findPaths' dict b history str pos = case directions history pos of
       if T.null (T.submap (L.toStrict (toLazyByteString str)) dict)
         then []
         else let strs = map ((str <>) . (b !)) xs
-                 hist = map (: pos:history) xs
+                 hist = map (: history) xs
              in strs ++ concatMap (uncurry3 (findPaths' dict b)) 
                                   (zip3 hist strs xs)
 
 findWords :: Dictionary -> Board -> [ByteString]
 findWords dict b =
-    nub (filter isWord (map toStr (concatMap (findPaths dict b) spaces)))
+    nubOrd (filter isWord (map toStr (concatMap (findPaths dict b) spaces)))
   where spaces = [(x,y) | x <- [0..3], y <- [0..3]]
         toStr  = L.toStrict . toLazyByteString
         isWord = (`T.member` dict)
