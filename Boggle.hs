@@ -2,17 +2,13 @@
 
 module Main (main) where
 
-import Data.Char
 import Data.List
-import Data.Word
 import Data.Monoid
 import Control.Monad
 import System.Random
-import Data.Set (Set)
 import Data.Trie (Trie)
 import Data.Vector (Vector)
 import Data.ByteString.Builder
-import qualified Data.Set as S
 import qualified Data.Trie as T
 import qualified Data.Vector as V
 import Data.ByteString (ByteString)
